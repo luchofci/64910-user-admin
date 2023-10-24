@@ -112,27 +112,124 @@ const usersArray = [
 ];
 // Obtener el body de la tabla
 const tableBody = document.getElementById('table-body')
+const searchInput = document.querySelector('#search')
+const userForm = document.querySelector("form#user-form")
 
-console.log(tableBody)
-// Iterar el array y agregar un tr por cada alumno que tengamos. 
+userForm.addEventListener("submit", (evt)=>{
 
-usersArray.forEach(user => {
+    //este prevent es para que la pagina/consola  no se recargue y quede la info para ver en la consola y no se recargue y se pierda por default.- Esto es asi siempre- se copia y pega
+    evt.preventDefault()
+    const el = evt.target.elements;
 
-    tableBody.innerHTML += `
-    <tr class="table-body">
-        <td class="user-image">
-            <img src="${user.image}" alt="${user.fullname} avatar">
-        </td>
-        <td class="user-name">${user.fullname}</td>
-        <td class="user-email">${user.email}</td>
-        <td class="user-location">${user.location}</td>
-        <td class="user-age">${user.age}</td>
-        <td class="user-date">${formatDate(user.bornDate)}</td>
-    </tr>`
+//Deberia cortar la ejecucuon de la funcion callback del evento submit cuando:
+    // password y password2 sean distintos
+    if(el.password.value !== el.password2.value){
+        alert(`Las contraseñas no coinciden`)
+        return;
+    }
+    // Email ya existe1
+    const userExist = usersArray.find((user) =>{
+        
+        if( user.email === el.email.value){
+            return true;
+        }
+    })
+
+        if(userExist){
+            alert(`El correo ya se encuentra registraod`)
+            return
+        }
+
+
+    console.dir(evt.target.elements.fullname)
+
+    const usuarioNuevo = {
+        fullname: el.nombreCompleto.value,
+        age: el.age.valueAsNumber,
+        email: el.email.value,
+        password: el.password.value,
+        active: el.active.checked,
+        //Los checkbox, no van con value, xq sino te devuelve on/off, pero si los reemplazamos con checked, transformamos en TRUE/FALSE.(booleano)
+        bornDate: new Date(el.bornDate.value).getTime(),
+        location: el.location.value,
+        id: crypto.randomUUID(),
+        //Esto de crypto va por default, dado que es una propiedad que se crea para sacar un ID random, de tal manera que no pueda duplicarse y cada usuario tenga una identidad diferente. Utilisza apis
+        image: el.image.value,
+
+    }
+    console.log(usuarioNuevo)
+
+    usersArray.push(usuarioNuevo)
+
+    PintarUsuarios(usersArray)
+
+
 
 })
 
 
+
+
+
+
+//Filtro de usuarios
+//Escuchar usando el usuario presiona una tecla en el uinput search.
+searchInput.addEventListener('keyup', (eventito) => {
+    // Obtener el valor del input y pasarlo a minuscula
+    const inputValue = eventito.target.value.toLowerCase();
+    //Buscar en todos los usuarios aquellos donde su nombre tenga este texto
+
+    const usuariosFiltrados = usersArray.filter((usuario) => {
+
+        const nombre = usuario.fullname.toLowerCase()
+
+        if (nombre.includes(inputValue)) {
+            return true
+        }
+        return false
+    })
+    //Pintar solo los usuarios que hayan coincidido
+    PintarUsuarios(usuariosFiltrados)
+
+})
+// console.log(tableBody)
+// Iterar el array y agregar un tr por cada alumno que tengamos. 
+
+
+function PintarUsuarios(arrayPintar) {
+    //Iterar el array y aghregar un TR por cada aluimno que tengamos.
+    tableBody.innerHTML = '';
+    arrayPintar.forEach((user, indiceActual) => {
+        tableBody.innerHTML += `
+        <tr class="table-body">
+            <td class="user-image">
+                <img src="${user.image}" alt="${user.fullname} avatar">
+            </td>
+            <td class="user-name">${user.fullname}</td>
+            <td class="user-email">${user.email}</td>
+            <td class="user-location">${user.location}</td>
+            <td class="user-age">${user.age}</td>
+            <td class="user-date">${formatDate(user.bornDate)}</td>
+            <td>
+                <button class="action-btn btn-danger" 
+                        title="Borrar Producto"
+                        onclick="borrarUsuario(${indiceActual})">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button> </td>
+        </tr>`
+
+    })
+
+}
+//Llamo por primera vez que se ejecute mi script la funcion pintar usuarios
+PintarUsuarios(usersArray)
+
+
+function borrarUsuario(indice) {
+    usersArray.splice(indice, 1)
+
+    PintarUsuarios(usersArray)
+}
 
 
 
