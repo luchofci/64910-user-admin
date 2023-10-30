@@ -116,42 +116,46 @@ const searchInput = document.querySelector('#search')
 const userForm = document.querySelector("form#user-form")
 const submitBtn = userForm.querySelector('button[type=submit]')
 
-userForm.addEventListener("submit", (evt)=>{
+userForm.addEventListener("submit", (evt) => {
 
     //este prevent es para que la pagina/consola  no se recargue y quede la info para ver en la consola y no se recargue y se pierda por default.- Esto es asi siempre- se copia y pega
     evt.preventDefault()
     const el = evt.target.elements;
 
-//Deberia cortar la ejecucuon de la funcion callback del evento submit cuando:
+    //Deberia cortar la ejecucuon de la funcion callback del evento submit cuando:
     // password y password2 sean distintos
-    if(el.password.value !== el.password2.value){
+    if (el.password.value !== el.password2.value) {
         alert(`Las contraseñas no coinciden`)
         return;
     }
-    //# Email ya existe1
-    // const emailExist = usersArray.find((user) =>{
-        
-    //     if( user.email === el.email.value){
-    //         return true;
-    //     }
-    // })
+    // Email ya existe
+    const emailExist = usersArray.find((user) => {
 
-    //     if(emailExist){
-    //         alert(`El correo ya se encuentra registraod`)
-    //         return
-    //     }
+        if (user.email === el.email.value) {
+            return true;
+        }
+    })
 
-    
-// ##### If else convencional ######
+    if (emailExist && el.id.value !== emailExist.id) {
+        Swal.fire({
+            title: 'El correo ya existe',
+            icon: 'error',
+            timer: 2000,
+        })
+        return
+    }
+
+
+    // ##### If else convencional ######
     let id;
-    if(el.id.value){
+    if (el.id.value) {
         id = el.id.value
-    } else{
+    } else {
         id: crypto.randomUUID()
     }
-//Aca abajo ponemos la misma logica que arriba, pero en una linea con ####### OPERADOR TERNARIO ########
-// const id = condicion ? condicionTrue : condicionFalse
-// const id = el.id.value ? el.id.value : crypto.randomUUID()
+    //Aca abajo ponemos la misma logica que arriba, pero en una linea con ####### OPERADOR TERNARIO ########
+    // const id = condicion ? condicionTrue : condicionFalse
+    // const id = el.id.value ? el.id.value : crypto.randomUUID()
 
 
     const user = {
@@ -169,42 +173,42 @@ userForm.addEventListener("submit", (evt)=>{
 
     }
 
-//Pregunto si tengo un id para saber si estoy editando o no.
-    if(el.id.value){
+    //Pregunto si tengo un id para saber si estoy editando o no.
+    if (el.id.value) {
         //editando
-        const  indice = usersArray.findIndex(usuario =>{
-            if(usuario.id === el.id.value){
+        const indice = usersArray.findIndex(usuario => {
+            if (usuario.id === el.id.value) {
                 return true
             }
         })
         //reemplazo el usuario en los datos nuevos del formulario
         usersArray[indice] = user
-        
+
         Swal.fire({
-            title:'Usuario Editado',
-            text:'Los datos del usuario fueron actualizados correctamente',
-            icon:'success',
+            title: 'Usuario Editado',
+            text: 'Los datos del usuario fueron actualizados correctamente',
+            icon: 'success',
             timer: 1500
         })
 
-        
-    }else{
+
+    } else {
         //agregando un usuario nuevo
         usersArray.push(user)
         Swal.fire({
-            title:'Usuario Agregado',
-            text:'suario se creo correctamente',
-            icon:'success',
+            title: 'Usuario Agregado',
+            text: 'suario se creo correctamente',
+            icon: 'success',
             timer: 1500
         })
     }
-//Al modificar el array necesito modificar la vista, poir eos lo vuelvo a pintar.
+    //Al modificar el array necesito modificar la vista, poir eos lo vuelvo a pintar.
     PintarUsuarios(usersArray)
 
     resetearFormularios()
 })
 
-function resetearFormularios(){
+function resetearFormularios() {
     userForm.reset()  //reseteo el formulario 
     userForm.elements.password.disabled = false; //Actrivo si estaban desactivados los input
     userForm.elements.password2.disabled = false;
@@ -257,7 +261,7 @@ function PintarUsuarios(arrayPintar) {
             <td>
                 <button class="action-btn btn-danger" 
                         title="Borrar Producto"
-                        onclick="borrarUsuario(${indiceActual})">
+                        onclick="borrarUsuario('${user.id}', '${user.fullname}')">
                     <i class="fa-solid fa-trash-can"></i>
                 </button> 
 
@@ -276,27 +280,34 @@ function PintarUsuarios(arrayPintar) {
 PintarUsuarios(usersArray)
 
 
-function borrarUsuario(indice) {
-    usersArray.splice(indice, 1)
+function borrarUsuario(ID, nombre) {
+    
+    const confirmDelete = confirm(`Realmente desea borrar este usuario ${nombre}`)
+    if(!confirmDelete) {
+        return
+    }
 
+    const indice = usersArray.findIndex(user => user.id === ID)
+
+    usersArray.splice(indice, 1)
     PintarUsuarios(usersArray)
 }
 
 //Los mas usados son ForEach, map, filter, findIndex, find, flat, flatMap, every, some.
-function editarUsuario(idBuscar){
-    const userEdit = usersArray.find((usuario) =>{
+function editarUsuario(idBuscar) {
+    const userEdit = usersArray.find((usuario) => {
 
-        if(usuario.id === idBuscar){
+        if (usuario.id === idBuscar) {
             return true
         }
     })
 
-    if(userEdit === undefined){
-        swal.fire('Error' , 'No se pudo editar el usuario' , 'error')
+    if (userEdit === undefined) {
+        swal.fire('Error', 'No se pudo editar el usuario', 'error')
         //SWEETALERT ES una libreria simple que sirve para descargar carteles de alerta, o error, etc, muy amigable para el usurio. Lanza un popup// Tambien esta bueno para avisarle al usuario que exitosamente agrego sus datos.
         return
     }
-    
+
     console.log(userEdit)
 
     const el = userForm.elements;
@@ -314,15 +325,15 @@ function editarUsuario(idBuscar){
     el.password.disabled = true
     el.password2.value = userEdit.password
     el.password2.disabled = true
-    
+
     el.bornDate.value = formatInputDate(userEdit.bornDate)
 
 
     submitBtn.classList.add('btn-edit');
     submitBtn.innerText = 'Editar usuario'
-    
 
-    
+
+
 }
 
 
