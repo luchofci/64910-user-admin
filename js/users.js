@@ -7,7 +7,7 @@ const usersArray = [
         active: true,
         password: 'password123',
         bornDate: new Date('1993-01-01').getTime(),
-        location: 'New York, NY',
+        location: 'Córdoba',
         image: 'https://oyster.ignimgs.com/mediawiki/apis.ign.com/mario-kart-for-wii-u/7/71/Mk8iconyoshi.png?width=1280'
     },
     {
@@ -18,7 +18,7 @@ const usersArray = [
         active: false,
         password: 'password456',
         bornDate: new Date('1998-05-05').getTime(),
-        location: 'Los Angeles, CA',
+        location: 'Mendoza',
         image: 'https://oyster.ignimgs.com/mediawiki/apis.ign.com/mario-kart-for-wii-u/f/f5/Mk8icondaisy.png?width=1280'
     },
     {
@@ -29,7 +29,7 @@ const usersArray = [
         active: true,
         password: 'password789',
         bornDate: new Date('1988-08-08').getTime(),
-        location: 'Miami, FL',
+        location: 'Buenos Aires',
         image: 'https://oyster.ignimgs.com/mediawiki/apis.ign.com/mario-kart-for-wii-u/1/1d/Mk8icontoadette.png?width=325'
     },
     {
@@ -40,7 +40,7 @@ const usersArray = [
         active: false,
         password: 'password101',
         bornDate: new Date('1983-04-10').getTime(),
-        location: 'Chicago, IL',
+        location: 'Mendoza',
         image: 'https://oyster.ignimgs.com/mediawiki/apis.ign.com/mario-kart-for-wii-u/d/d1/Mk8iconrosalina.png?width=1280'
     },
     {
@@ -51,7 +51,7 @@ const usersArray = [
         active: true,
         password: 'password202',
         bornDate: new Date('1995-02-15').getTime(),
-        location: 'Houston, TX',
+        location: 'Buenos Aires',
         image: 'https://oyster.ignimgs.com/mediawiki/apis.ign.com/mario-kart-for-wii-u/5/59/Mk8iconpeach.png?width=325'
     },
     {
@@ -62,7 +62,7 @@ const usersArray = [
         active: false,
         password: 'password303',
         bornDate: new Date('1989-07-07').getTime(),
-        location: 'San Francisco, CA',
+        location: 'Córdoba',
         image: 'https://oyster.ignimgs.com/mediawiki/apis.ign.com/mario-kart-for-wii-u/b/bf/Mk8iconmario.png?width=325'
     },
     {
@@ -73,7 +73,7 @@ const usersArray = [
         active: true,
         password: 'password404',
         bornDate: new Date('2001-11-11').getTime(),
-        location: 'Boston, MA',
+        location: 'Buenos Aires',
         image: 'https://oyster.ignimgs.com/mediawiki/apis.ign.com/mario-kart-for-wii-u/2/2d/Mk8icondk.png?width=325'
     },
     {
@@ -84,7 +84,7 @@ const usersArray = [
         active: false,
         password: 'password505',
         bornDate: new Date('1978-12-19').getTime(),
-        location: 'Dallas, TX',
+        location: 'Córdoba',
         image: "https://m.media-amazon.com/images/I/81wNRtDaTXL.png"
     },
     {
@@ -95,7 +95,7 @@ const usersArray = [
         active: true,
         password: 'password606',
         bornDate: new Date('1994-06-24').getTime(),
-        location: 'San Diego, CA',
+        location: 'San Luis',
         image: 'https://oyster.ignimgs.com/mediawiki/apis.ign.com/mario-kart-for-wii-u/3/3a/Mk8iconkoopa.png?width=325'
     },
     {
@@ -106,7 +106,7 @@ const usersArray = [
         active: false,
         password: 'password707',
         bornDate: new Date('1992-03-03').getTime(),
-        location: 'Denver, CO',
+        location: 'Córdoba',
         image: 'https://oyster.ignimgs.com/mediawiki/apis.ign.com/mario-kart-for-wii-u/b/b7/Mk8iconbowser.png?width=325'
     }
 ];
@@ -114,6 +114,7 @@ const usersArray = [
 const tableBody = document.getElementById('table-body')
 const searchInput = document.querySelector('#search')
 const userForm = document.querySelector("form#user-form")
+const submitBtn = userForm.querySelector('button[type=submit]')
 
 userForm.addEventListener("submit", (evt)=>{
 
@@ -127,23 +128,33 @@ userForm.addEventListener("submit", (evt)=>{
         alert(`Las contraseñas no coinciden`)
         return;
     }
-    // Email ya existe1
-    const userExist = usersArray.find((user) =>{
+    //# Email ya existe1
+    // const emailExist = usersArray.find((user) =>{
         
-        if( user.email === el.email.value){
-            return true;
-        }
-    })
+    //     if( user.email === el.email.value){
+    //         return true;
+    //     }
+    // })
 
-        if(userExist){
-            alert(`El correo ya se encuentra registraod`)
-            return
-        }
+    //     if(emailExist){
+    //         alert(`El correo ya se encuentra registraod`)
+    //         return
+    //     }
+
+    
+// ##### If else convencional ######
+    let id;
+    if(el.id.value){
+        id = el.id.value
+    } else{
+        id: crypto.randomUUID()
+    }
+//Aca abajo ponemos la misma logica que arriba, pero en una linea con ####### OPERADOR TERNARIO ########
+// const id = condicion ? condicionTrue : condicionFalse
+// const id = el.id.value ? el.id.value : crypto.randomUUID()
 
 
-    console.dir(evt.target.elements.fullname)
-
-    const usuarioNuevo = {
+    const user = {
         fullname: el.nombreCompleto.value,
         age: el.age.valueAsNumber,
         email: el.email.value,
@@ -152,22 +163,55 @@ userForm.addEventListener("submit", (evt)=>{
         //Los checkbox, no van con value, xq sino te devuelve on/off, pero si los reemplazamos con checked, transformamos en TRUE/FALSE.(booleano)
         bornDate: new Date(el.bornDate.value).getTime(),
         location: el.location.value,
-        id: crypto.randomUUID(),
+        id: id,
         //Esto de crypto va por default, dado que es una propiedad que se crea para sacar un ID random, de tal manera que no pueda duplicarse y cada usuario tenga una identidad diferente. Utilisza apis
         image: el.image.value,
 
     }
-    console.log(usuarioNuevo)
 
-    usersArray.push(usuarioNuevo)
+//Pregunto si tengo un id para saber si estoy editando o no.
+    if(el.id.value){
+        //editando
+        const  indice = usersArray.findIndex(usuario =>{
+            if(usuario.id === el.id.value){
+                return true
+            }
+        })
+        //reemplazo el usuario en los datos nuevos del formulario
+        usersArray[indice] = user
+        
+        Swal.fire({
+            title:'Usuario Editado',
+            text:'Los datos del usuario fueron actualizados correctamente',
+            icon:'success',
+            timer: 1500
+        })
 
+        
+    }else{
+        //agregando un usuario nuevo
+        usersArray.push(user)
+        Swal.fire({
+            title:'Usuario Agregado',
+            text:'suario se creo correctamente',
+            icon:'success',
+            timer: 1500
+        })
+    }
+//Al modificar el array necesito modificar la vista, poir eos lo vuelvo a pintar.
     PintarUsuarios(usersArray)
 
-
-
+    resetearFormularios()
 })
 
-
+function resetearFormularios(){
+    userForm.reset()  //reseteo el formulario 
+    userForm.elements.password.disabled = false; //Actrivo si estaban desactivados los input
+    userForm.elements.password2.disabled = false;
+    submitBtn.classList.remove('btn-edit') //Remuevo la clase editar
+    submitBtn.innerText = 'Agregar usuario' //Vuelvo el texto del boton a su valor por defecto.
+    userForm.elements.nombreCompleto.focus()
+}
 
 
 
@@ -215,7 +259,14 @@ function PintarUsuarios(arrayPintar) {
                         title="Borrar Producto"
                         onclick="borrarUsuario(${indiceActual})">
                     <i class="fa-solid fa-trash-can"></i>
-                </button> </td>
+                </button> 
+
+                <button class="action-btn" 
+                        title="Editar usuario"
+                        onclick="editarUsuario('${user.id}')">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+            </td>  
         </tr>`
 
     })
@@ -231,13 +282,52 @@ function borrarUsuario(indice) {
     PintarUsuarios(usersArray)
 }
 
+//Los mas usados son ForEach, map, filter, findIndex, find, flat, flatMap, every, some.
+function editarUsuario(idBuscar){
+    const userEdit = usersArray.find((usuario) =>{
+
+        if(usuario.id === idBuscar){
+            return true
+        }
+    })
+
+    if(userEdit === undefined){
+        swal.fire('Error' , 'No se pudo editar el usuario' , 'error')
+        //SWEETALERT ES una libreria simple que sirve para descargar carteles de alerta, o error, etc, muy amigable para el usurio. Lanza un popup// Tambien esta bueno para avisarle al usuario que exitosamente agrego sus datos.
+        return
+    }
+    
+    console.log(userEdit)
+
+    const el = userForm.elements;
+
+    el.id.value = userEdit.id;
+
+    el.fullname.value = userEdit.fullname
+    el.email.value = userEdit.email
+    el.location.value = userEdit.location
+    el.age.valueAsNumber = userEdit.age
+    el.image.value = userEdit.image
+    el.active.checked = userEdit.active
+
+    el.password.value = userEdit.password
+    el.password.disabled = true
+    el.password2.value = userEdit.password
+    el.password2.disabled = true
+    
+    el.bornDate.value = formatInputDate(userEdit.bornDate)
+
+
+    submitBtn.classList.add('btn-edit');
+    submitBtn.innerText = 'Editar usuario'
+    
+
+    
+}
 
 
 
-
-
-
-{/* 
+/* 
 <tr class="table-body">
     <td class="user-image">
         <img src="https://m.media-amazon.com/images/I/81wNRtDaTXL.png" alt="Imagen de prueba">
@@ -247,4 +337,4 @@ function borrarUsuario(indice) {
     <td class="user-location">Super Mario World</td>
     <td class="user-age">24</td>
     <td class="user-date">24/05/98</td>
-</tr> */}
+</tr> */

@@ -21,11 +21,13 @@
 
     <div class="admin-container">
         <section class="form-container">
-
             <form id="user-form">
+
+                <input type="hidden" name="id">
+
                 <div class="input-group">
                     <label for="fullname">Nombre Completo</label>
-                    <input type="text" name="nombreCompleto" id="fullname" value="Pepe Argento">
+                    <input type="text" name="nombreCompleto" id="fullname">
                 </div>
 
                 <div class="input-group">
@@ -43,7 +45,9 @@
                     <input type="email" name="email" id="email">
                 </div>
                 <div class="input-group">
-                    <select name="location">
+                    <label for="location">Localidad</label>
+                    <select name="location" id="location">
+                        <option value=""></option>
                         <option value="Buenos Aires">Buenos Aires</option>
                         <option value="Mendoza">Mendoza</option>
                         <option value="San Luis">San Luis</option>
@@ -67,12 +71,11 @@
                     <label for="active">Activo</label>
                     <input type="checkbox" name="active" id="active">
                 </div>
-                <button type="submit"      
-                        class="btn-form">Agregar usuario</button>
+                <button type="submit" class="btn-form">Agregar usuario</button>
 
             </form>
         </section>
-        
+
         <section class="table-container">
             <table class="user-table">
                 <thead>
@@ -93,6 +96,8 @@
         </section>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Esta libreria que esta arriba, nos la permite en la entrega, -->
     <script src="/js/formatDate.js"></script>
     <script src="/js/users.js"></script>
 </body>
