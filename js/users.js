@@ -1,4 +1,4 @@
-const usersArray = [
+const usersStart = [
     {
         fullname: 'John Doe',
         age: 30,
@@ -110,6 +110,26 @@ const usersArray = [
         image: 'https://oyster.ignimgs.com/mediawiki/apis.ign.com/mario-kart-for-wii-u/b/b7/Mk8iconbowser.png?width=325'
     }
 ];
+
+
+
+// const usersArray = JSON.parse(localStorage.getItem("users"))
+if (localStorage.getItem("users") === null) {
+    localStorage.setItem("users", JSON.stringify(usersStart))
+}
+
+const usersArray = JSON.parse(localStorage.getItem("users"))
+
+// let usersArray;
+
+// if(JSON.parse(localStorage.getItem("users"))){
+// //Si es nulo
+//     usersArray = JSON.parse(localStorage.getItem("users"))
+// }else{
+//     usersArray = []
+// }
+
+
 // Obtener el body de la tabla
 const tableBody = document.getElementById('table-body')
 const searchInput = document.querySelector('#search')
@@ -204,6 +224,7 @@ userForm.addEventListener("submit", (evt) => {
     }
     //Al modificar el array necesito modificar la vista, poir eos lo vuelvo a pintar.
     PintarUsuarios(usersArray)
+    actualizarLocalStorage()
 
     resetearFormularios()
 })
@@ -280,10 +301,21 @@ function PintarUsuarios(arrayPintar) {
 PintarUsuarios(usersArray)
 
 
+
+function actualizarLocalStorage() {
+    localStorage.setItem("users", JSON.stringify(usersArray))
+
+
+
+
+}
+
+
+
 function borrarUsuario(ID, nombre) {
-    
+
     const confirmDelete = confirm(`Realmente desea borrar este usuario ${nombre}`)
-    if(!confirmDelete) {
+    if (!confirmDelete) {
         return
     }
 
@@ -291,6 +323,7 @@ function borrarUsuario(ID, nombre) {
 
     usersArray.splice(indice, 1)
     PintarUsuarios(usersArray)
+    actualizarLocalStorage()
 }
 
 //Los mas usados son ForEach, map, filter, findIndex, find, flat, flatMap, every, some.
