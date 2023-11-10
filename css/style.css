@@ -24,11 +24,16 @@ body {
     background-color: dodgerblue;
     color: white;
 }
-.header a {
+.header .header-link {
     color: white;
     text-decoration: none;
     padding: 1rem 1.25rem;
     display: inline-block;
+    background-color: dodgerblue;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    cursor: pointer;
     &:hover{
         background-color: rgb(17, 91, 164)
     }
@@ -36,8 +41,19 @@ body {
 .user-info{
     display: flex;
     align-items: center;
-    padding: 1rem 1.25rem;
+    /* padding: 1rem 1.25rem; */
+
+    .user-profile-picture{
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin: 0 1rem;
+    }
+
 }
+
+
 
 .user-table {
     width: 100%;
