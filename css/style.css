@@ -160,3 +160,44 @@ body {
 .mb {
     margin-bottom: .75rem;
 }
+
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    .card {
+        background-color: white;
+        color: #424242;
+        border: 1px solid crimson;
+        .card-image {
+            height: 150px;
+            overflow: hidden;
+            img {
+                width: 100%;
+                height: 150px;
+                object-fit: cover;
+            }
+        }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+        .card-price {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .card-footer a {
+                padding: .5rem .75rem;
+                background-color: crimson;
+                color: white;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 1rem;
+                font-weight: 500;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        
+    }
+}
